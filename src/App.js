@@ -1,23 +1,25 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Banner from './scences/global/Banner';
+import NavBar from './scences/global/NavBar';
+import AppBar from './scences/global/AppBar';
+import { Outlet } from 'react-router-dom';
+import Copyright from './scences/global/Copyright';
+import Footer from './scences/global/Footer';
+import Loading from './components/Loading';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+      <AppBar />
+      <div className="container">
+        <Banner />
+        <NavBar />
+        <Outlet />
+        <Footer />
+      </div>
+      
+      <Copyright />
     </div>
   );
 }
