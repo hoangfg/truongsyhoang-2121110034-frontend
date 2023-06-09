@@ -1,24 +1,24 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const productApi = {
+export const topicApi = {
     getAll(params) {
-        var url = '/products';
+        var url = '/topics';
         return axiosInstance.get(url, { params })
     },
-    get(id, params = {}) {
-        var url = `/products/${id}`;
-        return axiosInstance.get(url, {params})
+    get(id) {
+        var url = `/topics/${id}`;
+        return axiosInstance.get(url)
     },
     add(data) {
-        var url = `/products`;
+        var url = `/topics`;
         return axiosInstance.post(url, data)
     },
     update(id, data) {
-        var url = `/products/${id}`;
+        var url = `/topics/${id}`;
         return axiosInstance.put(url, data)
     },
     delete(id) {
-        var url = `/products/${id}`;
+        var url = `/topics/${id}`;
         return axiosInstance.delete(url)
     }
 }

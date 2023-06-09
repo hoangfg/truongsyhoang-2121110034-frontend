@@ -5,7 +5,16 @@ export default function ProductBox(props) {
   const products = props.products;
   // console.log("1", products)
   var myView = products.map((product) => (
-    <li key={product.id} className="span3" style={{ height: '350px', margin: '5px' }}>
+    <li
+      key={product.id}
+      className="span3"
+      style={{
+        height: "380px",
+        margin: "10px 5px",
+
+        justifyContent: "space-between",
+      }}
+    >
       <Product product={product} />
     </li>
   ));

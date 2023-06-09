@@ -10,6 +10,12 @@ import Checkout from './scences/checkout/Checkout';
 import Confirmation from './scences/checkout/Confirmation';
 import CartMenu from './scences/global/CartMenu';
 import Admin from './admin/Admin';
+import PostList from './scences/postList/PostList';
+import PostDetail from './scences/postDetail/PostDetail';
+import Contact from './scences/contact/Contact';
+import Registation from './login/Registation';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -26,13 +32,14 @@ const router = createBrowserRouter([
         element: <ProductList />
       },
       {
-        path: 'product/page/:pageNum',
-        element: <ProductList />
-      },
-      {
         path: 'product/:id',
         element: <ProductDetail />
       },
+      {
+        path: 'product/page/:pageNum',
+        element: <ProductList />
+      },
+      
       {
         path: 'checkout',
         element: <Checkout />
@@ -44,6 +51,26 @@ const router = createBrowserRouter([
       {
         path: 'cart',
         element: <CartMenu />
+      },
+      {
+        path: 'post',
+        element: <PostList />
+      },
+      {
+        path: 'post/:id',
+        element: <PostDetail />
+      },
+      {
+        path: 'post/page/:pageNum',
+        element: <PostList />
+      },
+      {
+        path: 'contact',
+        element: <Contact />
+      },
+      {
+        path: 'registation',
+        element: <Registation />
       },
     ]
   },
