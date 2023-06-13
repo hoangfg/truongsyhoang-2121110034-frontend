@@ -14,6 +14,18 @@ import PostList from './scences/postList/PostList';
 import PostDetail from './scences/postDetail/PostDetail';
 import Contact from './scences/contact/Contact';
 import Registation from './login/Registation';
+import Dashboard from './admin/scenes/Dashboard';
+import AdminProduct from './admin/scenes/product/AdminProduct';
+import AdminProductBox from './admin/scenes/product/AdminProductBox';
+import AdminProductDetail from './admin/scenes/product/AdminProductDetail';
+import AdminProductAdd from './admin/scenes/product/AdminProductAdd';
+import AdminProductEdit from './admin/scenes/product/AdminProductEdit';
+import AdminCategoryEdit from './admin/scenes/category/AdminCategoryEdit';
+import AdminCategoryDetail from './admin/scenes/category/AdminCategoryDetail';
+import AdminCategoryBox from './admin/scenes/category/AdminCategoryBox';
+import AdminCategoryAdd from './admin/scenes/category/AdminCategoryAdd';
+import AdminCategory from './admin/scenes/category/AdminCategory';
+
 
 
 
@@ -39,7 +51,7 @@ const router = createBrowserRouter([
         path: 'product/page/:pageNum',
         element: <ProductList />
       },
-      
+
       {
         path: 'checkout',
         element: <Checkout />
@@ -77,7 +89,64 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element: <Admin />,
-
+    children: [
+      {
+        index: true,
+        element: <Dashboard />
+      },
+      {
+        path: '/admin/product',
+        element: <AdminProduct />,
+        children: [
+          {
+            index: true,
+            element: <AdminProductBox />
+          },
+          {
+            path: '/admin/product/page/:pageNum',
+            element: <AdminProductBox />,
+          },
+          {
+            path: '/admin/product/:id',
+            element: <AdminProductDetail />,
+          },
+          {
+            path: '/admin/product/add',
+            element: <AdminProductAdd />,
+          },
+          {
+            path: '/admin/product/edit/:id',
+            element: <AdminProductEdit />,
+          },
+        ]
+      },
+      {
+        path: '/admin/category',
+        element: <AdminCategory />,
+        children: [
+          {
+            index: true,
+            element: <AdminCategoryBox />
+          },
+          {
+            path: '/admin/category/page/:pageNum',
+            element: <AdminCategoryBox />,
+          },
+          {
+            path: '/admin/category/:id',
+            element: <AdminCategoryDetail />,
+          },
+          {
+            path: '/admin/category/add',
+            element: <AdminCategoryAdd />,
+          },
+          {
+            path: '/admin/category/edit/:id',
+            element: <AdminCategoryEdit />,
+          },
+        ]
+      }
+    ]
   }
 ])
 root.render(

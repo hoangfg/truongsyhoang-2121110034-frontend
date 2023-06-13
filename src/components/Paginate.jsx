@@ -4,7 +4,7 @@ export default function Paginate(props) {
   var currentPage = parseInt(props.currentPage);
   var basePath = props.basePath;
   var allLi = [];
-  if (currentPage != 1)
+  if (currentPage !== 1)
     allLi.push(
       <li>
         <Link to={basePath + 1}>First</Link>

@@ -9,8 +9,13 @@ import Footer from './scences/global/Footer';
 import Loading from './components/Loading';
 import { Provider } from 'react-redux';
 import store from './state/store';
+import SelectBox from './components/SelectBox';
+import CategorySelect from './components/CategorySelect';
+import BrandSelect from './components/BrandSelect';
+import FileUpload from './components/FileUpload';
 
 function App() {
+
   return (
     <div >
       <Provider store={store}>
@@ -20,6 +25,7 @@ function App() {
           <NavBar />
           <Outlet />
           <Footer />
+          <FileUpload />
         </div>
 
         <Copyright />

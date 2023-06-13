@@ -144,26 +144,7 @@ export default function CartMenu() {
         </tbody>
       </table>
       <br />
-      <table className="table table-bordered">
-        <tbody>
-          <tr>
-            <td>
-              <form className="form-inline">
-                <label style={{ minWidth: 159 }}> VOUCHERS Code: </label>
-                <input
-                  type="text"
-                  className="input-medium"
-                  placeholder="CODE"
-                />
-                <button type="submit" className="shopBtn">
-                  
-                  ADD
-                </button>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      
 
       <a href="products.html" className="shopBtn btn-large">
         <span className="icon-arrow-left" /> Continue Shopping

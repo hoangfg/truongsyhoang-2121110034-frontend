@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 export default function Product(props) {
   // console.log(props)
   var product = props.product;
+  console.log(product);
   const dispatch = useDispatch();
   return (
     <div className="thumbnail" style={{ height: "100%" }}>

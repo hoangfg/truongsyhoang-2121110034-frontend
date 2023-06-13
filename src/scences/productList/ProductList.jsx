@@ -57,6 +57,7 @@ export default function ProductList() {
     sort: {
       id: "desc",
     },
+
     filters: {
       productName: {
         $contains: filterKey ? filterKey : null,

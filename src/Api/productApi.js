@@ -7,7 +7,7 @@ export const productApi = {
     },
     get(id, params = {}) {
         var url = `/products/${id}`;
-        return axiosInstance.get(url, {params})
+        return axiosInstance.get(url, { params })
     },
     add(data) {
         var url = `/products`;
@@ -20,5 +20,9 @@ export const productApi = {
     delete(id) {
         var url = `/products/${id}`;
         return axiosInstance.delete(url)
-    }
+    },
+    getListByCategoryID(categoryID) {
+        var url = `products?populate=category&filters[category][id]=${categoryID}`;
+        return axiosInstance.get(url);
+    },
 }

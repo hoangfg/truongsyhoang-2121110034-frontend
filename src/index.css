@@ -19,11 +19,11 @@ code {
     box-sizing: border-box;
 }
 
-html {
+/* html {
     font-family: 'Nunito', sans-serif;
     font-size: 22px;
     color: #fff;
-}
+} */
 
 body {
     min-height: 100vh;

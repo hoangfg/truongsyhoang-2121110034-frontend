@@ -21,6 +21,11 @@ export default function Home() {
     sort: {
       id: "desc",
     },
+    query: {
+      category: {
+        $ne: null,
+      },
+    },
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +38,7 @@ export default function Home() {
   return (
     <div>
       <MainCarousel />
-      <div >{myView1}</div>
+      <div>{myView1}</div>
     </div>
   );
 }
