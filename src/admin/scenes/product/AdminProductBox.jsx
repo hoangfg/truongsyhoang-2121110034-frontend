@@ -37,9 +37,7 @@ export default function AdminProductBox() {
     };
     deleteProduct(e.target.getAttribute("name"));
   };
-  const handleShow = (e) => {
-     <AdminCategoryDetail handleShow = {handleShow}/>
-  }
+
   const handleSelect = (e) => {
     setViewOption(e.target.value);
   };

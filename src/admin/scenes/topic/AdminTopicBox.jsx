@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Paginate from "../../../components/Paginate";
 import { Link, useParams } from "react-router-dom";
-import { categoryApi } from "./../../../Api/categoryApi";
 import Loading from "../../../components/Loading";
-import AdminCategoryItem from "./AdminCategoryItem";
+import AdminBrandItem from "./AdminBrandItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { productApi } from "../../../Api/productApi";
-export default function AdminCategoryBox() {
-  var [categories, setCategories] = useState({});
+import { brandApi } from "../../../Api/brandApi";
+export default function AdminBrandBox() {
+  var [brands, setBrands] = useState({});
   var [loading, setLoading] = useState(true);
   var [totalPage, setTotalPage] = useState(1);
   const [msgSuccess, setMsgSuccess] = useState("");
@@ -18,21 +18,14 @@ export default function AdminCategoryBox() {
   var { pageNum } = useParams();
 
   const handleDelete = (e) => {
-    var categoryId = e.target.getAttribute("name");
-
-    const deleteCategory = async (id) => {
-      var c = window.confirm("Remove Category");
+    const deleteBrand = async (id) => {
+      var c = window.confirm("Remove Brand");
       if (c === true) {
         try {
-          const products = await productApi.getListByCategoryID(categoryId);
-          if (products.data.data.length > 0) {
-            toast.warning("Tôn tại sản phẩm không thể xóa danh mục");
-          } else {
-            e.target.classList.remove("icon-remove");
-            e.target.classList.add("icon-spinner");
-            await categoryApi.delete(id);
-            toast.success("Xóa danh mục thành công");
-          }
+          e.target.classList.remove("icon-remove");
+          e.target.classList.add("icon-spinner");
+          await brandApi.delete(id);
+          toast.success("Xóa danh mục thành công");
         } catch (error) {
           toast.success("Xóa thất bại ", error);
         } finally {
@@ -43,7 +36,7 @@ export default function AdminCategoryBox() {
         }
       }
     };
-    deleteCategory(e.target.getAttribute("name"));
+    deleteBrand(e.target.getAttribute("name"));
   };
   const handleSelect = (e) => {
     setViewOption(e.target.value);
@@ -52,7 +45,7 @@ export default function AdminCategoryBox() {
   //
   //   const togglePublish = async (e) => {
 
-  //     await categoryApi.update(e.target.getAttribute("name"), data);
+  //     await brandApi.update(e.target.getAttribute("name"), data);
   //     setLoadData(loadData + 1);
   //     toast.success("Thay đổi trạng tháu thành công");
   //     // console.log(e.target.value);
@@ -62,43 +55,55 @@ export default function AdminCategoryBox() {
 
   const handlePublish = async (e) => {
     // Kiểm tra nếu giá trị e.target.value là "0"
-    var categoryId = e.target.getAttribute("name");
+    var brandId = e.target.getAttribute("name");
     var data = {
       data: {
         publishedAt: e.target.value == 0 ? Date.now() : null,
       },
     };
     if (e.target.value == 0) {
-      await categoryApi.update(categoryId, data);
+      await brandApi.update(brandId, data);
       toast.success("Thay đổi trạng thái thành công");
     } else {
       // var params = {
       //   populate: "*",
       //   data: {
-      //     category: {
+      //     brand: {
       //       data: {
       //         id: 6,
       //       },
       //     },
       //   },
       // };
-      const products = await productApi.getListByCategoryID(categoryId);
+      const products = await productApi.getListByBrandID(brandId);
       if (products.data.data.length > 0) {
-        //  const c = window.confirm(
-        //    "Nếu thay đổi sẽ làm thay đổi toàn bộ sản phẩm liên quan"
-        //  );
-        //  if (c) {
-        //    var dataP = {
-        //      data: {
-        //        publishedAt: null,
-        //      },
-        //    };
-        toast.warning("Tôn tại sản phẩm không thể thay đôi");
+        const c = window.confirm(
+          "Nếu thay đổi sẽ làm thay đổi toàn bộ sản phẩm liên quan"
+        );
+        if (c) {
+          var dataP = {
+            data: {
+              publishedAt: null,
+            },
+          };
+
+          const togglePublish = async () => {
+            await products.data.data.map((product) => {
+              productApi.update(product.id, dataP);
+            });
+          };
+          togglePublish();
+          await brandApi.update(brandId, data);
+          toast.success("Thay đổi trạng thái thành công");
+        }
       } else {
-        await categoryApi.update(categoryId, data);
+        await brandApi.update(brandId, data);
 
         toast.success("Thay đổi trạng thái thành công");
       }
+      // console.log("p", products.data.data);
+      // console.log(brandId);
+      // toast.success("Thay đổi trạng thái thành công 2");
     }
 
     setLoadData(loadData + 1);
@@ -125,15 +130,15 @@ export default function AdminCategoryBox() {
           </td>
         </tr>
       ) : (
-        categories.map((category, i) => (
-          <AdminCategoryItem
+        brands.map((brand, i) => (
+          <AdminBrandItem
             handleDelete={handleDelete}
             handlePublish={handlePublish}
-            key={category.id}
+            key={brand.id}
             stt={
               (params.pagination.page - 1) * params.pagination.pageSize + i + 1
             }
-            category={category}
+            brand={brand}
           />
         ))
       )}
@@ -141,8 +146,9 @@ export default function AdminCategoryBox() {
   );
   useEffect(() => {
     const fatchData = async () => {
-      const response = await categoryApi.getAll(params);
-      setCategories(response.data.data);
+      const response = await brandApi.getAll(params);
+      setBrands(response.data.data);
+      console.log(brands)
       setTotalPage(response.data.meta.pagination.pageCount);
       //   console.log(pageNum);
       setLoading(false);
@@ -202,11 +208,11 @@ export default function AdminCategoryBox() {
             <div className="dt-buttons btn-group flex-wrap">
               {" "}
               <Link
-                to="/admin/category/add"
+                to="/admin/brand/add"
                 className="btn btn-success buttons-csv buttons-html5"
               >
                 <i className="fas fa-plus mx-1" />
-                <span>Add Category</span>
+                <span>Add Brand</span>
               </Link>
             </div>
           </div>
@@ -286,7 +292,7 @@ export default function AdminCategoryBox() {
                     aria-sort="ascending"
                     aria-label="Rendering engine: activate to sort column descending"
                   >
-                    categoryName
+                    brandName
                   </th>
 
                   <th
@@ -329,7 +335,7 @@ export default function AdminCategoryBox() {
                 <Paginate
                   totalPage={totalPage}
                   currentPage={pageNum ? pageNum : 1}
-                  basePath="http://localhost:3000/admin/category/page/"
+                  basePath="http://localhost:3000/admin/brand/page/"
                 />
               </div>
             )}

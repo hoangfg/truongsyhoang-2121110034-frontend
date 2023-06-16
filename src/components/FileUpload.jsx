@@ -7,7 +7,7 @@ export default function FileUpload(props) {
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
-    console.log("chon file", e.target.files);
+    // console.log("chon file", e.target.files);
   };
   const handleUpload = async (e) => {
     // console.log("send file", file);

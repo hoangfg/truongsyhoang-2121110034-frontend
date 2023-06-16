@@ -3,11 +3,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import AppUrl from "../../../Api/AppUrl";
-import { categoryApi } from "../../../Api/categoryApi";
-export default function AdminCategoryAdd() {
+import { brandApi } from "../../../Api/brandApi";
+export default function AdminBrandAdd() {
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
-    categoryName: "",
+    brandName: "",
     description: "",
   });
   const handleChange = (e) => {
@@ -20,29 +20,29 @@ export default function AdminCategoryAdd() {
   const handleSubmit = (e) => {
     e.preventDefault();
     var err = "";
-    if (data.categoryName == "") {
-      err += "Category Name is required \n";
+    if (data.brandName == "") {
+      err += "Brand Name is required \n";
     }
     if (data.description == "") {
       err += "Description is required \n";
     }
 
     if (err === "") {
-      const addCategory = async (data) => {
+      const addBrand = async (data) => {
         var sendData = {
           data: data,
         };
         try {
-          document.getElementById("btnAddCategory").innerText = "Create.....";
-          const response = await categoryApi.add(sendData);
+          document.getElementById("btnAddBrand").innerText = "Create.....";
+          const response = await brandApi.add(sendData);
           console.log();
           if (response.status == 200) {
             toast.success("Thêm danh mục thành công");
-            document.getElementById("createCategory").reset();
-            document.getElementById("btnAddCategory").innerText = "Submit";
+            document.getElementById("createBrand").reset();
+            document.getElementById("btnAddBrand").innerText = "Submit";
 
             setData({
-              categoryName: "",
+              brandName: "",
               description: "",
             });
           }
@@ -52,7 +52,7 @@ export default function AdminCategoryAdd() {
         }
         window.scroll(0, 0);
       };
-      addCategory(data);
+      addBrand(data);
     } else {
       toast.error(err);
       return false;
@@ -74,19 +74,19 @@ export default function AdminCategoryAdd() {
         theme="colored"
       />
       <div className="col-12">
-        <form id="createCategory" onSubmit={handleSubmit}>
+        <form id="createBrand" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="form-group row" style={{ height: "40px" }}>
-                <label htmlFor="categoryName" className="col-3 col-form-label">
-                  categoryName
+                <label htmlFor="brandName" className="col-3 col-form-label">
+                  brandName
                 </label>
                 <div className="col-9">
                   <input
                     style={{ height: "100%" }}
-                    id="categoryName"
-                    name="categoryName"
-                    placeholder="categoryName"
+                    id="brandName"
+                    name="brandName"
+                    placeholder="brandName"
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -112,7 +112,7 @@ export default function AdminCategoryAdd() {
                     id="descriptionHelpBlock"
                     className="form-text text-muted"
                   >
-                    Mô tả danh mục
+                    Mô tả thương hiệu
                   </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function AdminCategoryAdd() {
           <div className="row">
             <div className="d-flex justify-content-end col-12">
               <button
-                id="btnAddCategory"
+                id="btnAddBrand"
                 name="submit"
                 type="submit"
                 className="btn btn-primary justify-content-end"

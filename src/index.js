@@ -13,7 +13,7 @@ import Admin from './admin/Admin';
 import PostList from './scences/postList/PostList';
 import PostDetail from './scences/postDetail/PostDetail';
 import Contact from './scences/contact/Contact';
-import Registation from './login/Registation';
+
 import Dashboard from './admin/scenes/Dashboard';
 import AdminProduct from './admin/scenes/product/AdminProduct';
 import AdminProductBox from './admin/scenes/product/AdminProductBox';
@@ -25,6 +25,13 @@ import AdminCategoryDetail from './admin/scenes/category/AdminCategoryDetail';
 import AdminCategoryBox from './admin/scenes/category/AdminCategoryBox';
 import AdminCategoryAdd from './admin/scenes/category/AdminCategoryAdd';
 import AdminCategory from './admin/scenes/category/AdminCategory';
+import AdminBrand from './admin/scenes/brand/AdminBrand';
+import AdminBrandBox from './admin/scenes/brand/AdminBrandBox';
+import AdminBrandDetail from './admin/scenes/brand/AdminBrandDetail';
+import AdminBrandEdit from './admin/scenes/brand/AdminBrandEdit';
+import AdminBrandAdd from './admin/scenes/brand/AdminBrandAdd';
+import Register from './auth/Register';
+import Login from './auth/Login';
 
 
 
@@ -38,6 +45,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
+      },
+      {
+        path: 'register',
+        element: <Register />
+      },
+      {
+        path: 'login',
+        element: <Login />
       },
       {
         path: 'product',
@@ -80,10 +95,10 @@ const router = createBrowserRouter([
         path: 'contact',
         element: <Contact />
       },
-      {
-        path: 'registation',
-        element: <Registation />
-      },
+      // {
+      //   path: 'registation',
+      //   element: <Registation />
+      // },
     ]
   },
   {
@@ -121,6 +136,33 @@ const router = createBrowserRouter([
         ]
       },
       {
+        path: '/admin/brand',
+        element: <AdminBrand />,
+        children: [
+
+          {
+            index: true,
+            element: <AdminBrandBox />
+          },
+          {
+            path: '/admin/brand/page/:pageNum',
+            element: <AdminBrandBox />,
+          },
+          {
+            path: '/admin/brand/:id',
+            element: <AdminBrandDetail />,
+          },
+          {
+            path: '/admin/brand/add',
+            element: <AdminBrandAdd />,
+          },
+          {
+            path: '/admin/brand/edit/:id',
+            element: <AdminBrandEdit />,
+          },
+        ]
+      },
+      {
         path: '/admin/category',
         element: <AdminCategory />,
         children: [
@@ -145,7 +187,7 @@ const router = createBrowserRouter([
             element: <AdminCategoryEdit />,
           },
         ]
-      }
+      },
     ]
   }
 ])

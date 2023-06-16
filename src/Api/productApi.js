@@ -25,4 +25,8 @@ export const productApi = {
         var url = `products?populate=category&filters[category][id]=${categoryID}`;
         return axiosInstance.get(url);
     },
+    getListByBrandID(brandID) {
+        var url = `products?populate=brand&filters[brand][id]=${brandID}`;
+        return axiosInstance.get(url);
+    },
 }

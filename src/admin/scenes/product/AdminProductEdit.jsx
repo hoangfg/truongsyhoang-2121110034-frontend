@@ -20,7 +20,7 @@ export default function AdminProductEdit() {
     brand: "",
     image: [],
   });
-  console.log("data 1: ", data);
+  // console.log("data 1: ", data);
   const handleChange = (e) => {
     setData({
       ...data,
@@ -94,7 +94,7 @@ export default function AdminProductEdit() {
         brand: oldProduct.attributes.brand.data.id,
         image: oldProduct.attributes.image.data.map((img) => img.id),
       });
-      console.log("data", data);
+      // console.log("data", data);
       var oldImages = oldProduct.attributes.image.data.map((img) => {
         return {
           id: img.id,

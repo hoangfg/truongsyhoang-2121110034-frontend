@@ -2,6 +2,8 @@ import React from "react";
 import TopNav from "./components/TopNav";
 import Menu from "./components/Menu";
 import { Outlet } from "react-router-dom";
+import AdminCategoryDetail from "./scenes/category/AdminCategoryDetail";
+import AdminProductDetail from "./scenes/product/AdminProductDetail";
 
 export default function Admin() {
   var ss = document.createElement("link");
@@ -45,6 +47,7 @@ export default function Admin() {
           </section>
           {/* Main content */}
           <section className="content">
+            
             <div className="container-fluid">
               <div className="row">
                 <div className="col-12">
@@ -52,7 +55,6 @@ export default function Admin() {
                   <div className="card">
                     <div className="card-header">
                       <h3 className="card-title">Title</h3>
-
                     </div>
                     <div className="card-body">
                       <Outlet />
@@ -84,7 +86,6 @@ export default function Admin() {
         </aside>
         {/* /.control-sidebar */}
       </div>
-      
     </div>
-  )
+  );
 }

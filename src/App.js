@@ -13,6 +13,7 @@ import SelectBox from './components/SelectBox';
 import CategorySelect from './components/CategorySelect';
 import BrandSelect from './components/BrandSelect';
 import FileUpload from './components/FileUpload';
+import AdminProductDetail from './admin/scenes/product/AdminProductDetail';
 
 function App() {
 
@@ -25,7 +26,7 @@ function App() {
           <NavBar />
           <Outlet />
           <Footer />
-          <FileUpload />
+          
         </div>
 
         <Copyright />

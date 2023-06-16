@@ -33,12 +33,14 @@ export default function AdminProductAdd() {
         var sendData = {
           data: data,
         };
+        // console.log(sendData.data);
         try {
           if (sendData.data.image.length < 1) {
             toast.error("Thêm sản phẩm thất bại, cần ít nhất 1 hình ảnh");
           } else {
             document.getElementById("btnAddProduct").innerText = "Create.....";
             const response = await productApi.add(sendData);
+            console.log(response);
             console.log();
             if (response.status == 200) {
               toast.success("Thêm sản phẩm thành công");
@@ -58,7 +60,7 @@ export default function AdminProductAdd() {
           }
           // console.log(sendData.data.image);
         } catch (error) {
-          toast.error("Thêm sản phẩm thất bại" + error);
+          toast.error("Thêm sản phẩm thất bại \n" + error);
         }
         window.scroll(0, 0);
       };

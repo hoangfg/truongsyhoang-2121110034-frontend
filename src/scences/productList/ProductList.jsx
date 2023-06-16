@@ -79,7 +79,7 @@ export default function ProductList() {
       var response2 = await productApi.getAll(params);
 
       // console.log("r1: ", response1)
-      // console.log("r2: ", response2);
+      console.log("r2: ", response2);
       setCategories(response1.data.data);
       setProducts(response2.data.data);
       // console.log("r4444: ", products)

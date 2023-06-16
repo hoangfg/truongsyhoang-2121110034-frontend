@@ -75,6 +75,60 @@ export default function Menu() {
                      
                     </ul>
                   </li>
+                  <li className="nav-item">
+                    <a href="#st" className="nav-link">
+                      <i className="nav-icon fas fa-table" />
+                      <p>
+                        Quản lý danh mục
+                        <i className="fas fa-angle-left right" />
+                      </p>
+                    </a>
+                    <ul
+                      className="nav nav-treeview"
+                      style={{ display: "none" }}
+                    >
+                      <li className="nav-item">
+                        <Link to="/admin/category" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Tất cả danh mục</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/admin/category/add" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Thêm danh mục</p>
+                        </Link>
+                      </li>
+                     
+                    </ul>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#st" className="nav-link">
+                      <i className="nav-icon fas fa-table" />
+                      <p>
+                        Quản lý thương hiệu
+                        <i className="fas fa-angle-left right" />
+                      </p>
+                    </a>
+                    <ul
+                      className="nav nav-treeview"
+                      style={{ display: "none" }}
+                    >
+                      <li className="nav-item">
+                        <Link to="/admin/brand" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Tất cả thương hiệu</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/admin/brand/add" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Thêm thương hiệu</p>
+                        </Link>
+                      </li>
+                     
+                    </ul>
+                  </li>
                 </ul>
               </nav>
               {/* /.sidebar-menu */}

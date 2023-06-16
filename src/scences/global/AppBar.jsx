@@ -3,12 +3,6 @@ import currency from "currency.js";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-
-
-
-
-
-
 export default function AppBar() {
   var cartItems = useSelector((state) => state.cart.items);
   // console.log(cartItems)
@@ -18,7 +12,7 @@ export default function AppBar() {
 
   const total = cartItems.reduce((totalPrice, item) => {
     return totalPrice + item.attributes.price * item.count;
-  }, 0)
+  }, 0);
   return (
     <div className="navbar navbar-inverse navbar-fixed-top">
       <div className="topNav">
@@ -45,9 +39,12 @@ export default function AppBar() {
             <a href="#st">
               <span className="icon-user" /> My Account
             </a>
-            <a href="register.html">
+            <Link to="/register">
               <span className="icon-edit" /> Free Register{" "}
-            </a>
+            </Link>
+            <Link to="/login">
+              <span className="icon-signin" /> login
+            </Link>
             <a href="contact.html">
               <span className="icon-envelope" /> Contact us
             </a>
