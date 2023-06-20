@@ -31,7 +31,9 @@ export default function ProductDetail() {
             symbol: "",
             separator: ".",
             decimal: ",",
-          }).format("0,0")}
+          })
+            .format()
+            .replace(/(\.00$|,00$)/g, "")}
           đ]
         </h3>
 
@@ -60,7 +62,9 @@ export default function ProductDetail() {
               />
             </div>
           </div>
-          <p>{product.attributes.description}</p>
+          <div
+            dangerouslySetInnerHTML={{ __html: product.attributes.description }}
+          ></div>
           <p>
             <Link
               to="#st"
@@ -82,9 +86,9 @@ export default function ProductDetail() {
     loading === true ? (
       <Loading />
     ) : (
-      <div>
-        <p>{product.attributes.detail}</p>
-      </div>
+      <div
+        dangerouslySetInnerHTML={{ __html: product.attributes.detail }}
+      ></div>
     );
   var params = {
     populate: "*",

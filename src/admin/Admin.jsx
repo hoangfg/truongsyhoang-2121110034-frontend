@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import TopNav from "./components/TopNav";
 import Menu from "./components/Menu";
 import { Outlet } from "react-router-dom";
 import AdminCategoryDetail from "./scenes/category/AdminCategoryDetail";
 import AdminProductDetail from "./scenes/product/AdminProductDetail";
+import { Provider, useSelector } from "react-redux";
+import store from "../state/store";
+import { Navigate } from "react-router-dom";
 
 export default function Admin() {
+  const [role, setRole] = useState(useSelector((state) => state.user.role));
   var ss = document.createElement("link");
   ss.rel = "stylesheet";
   ss.type = "text/css";
   ss.href = "/admin/dist/css/adminlte.min.css";
   document.head.appendChild(ss);
-
+console.log(role)
   return (
-    <div>
+    <>
       {/* Site wrapper */}
       <div className="wrapper">
+        {role == "Authenticated" && <Navigate to="/" replace={true} />}
+        {role == "Public" && <Navigate to="/login" replace={true} />}
         {/* Navbar */}
         <TopNav />
         {/* /.navbar */}
@@ -47,7 +53,6 @@ export default function Admin() {
           </section>
           {/* Main content */}
           <section className="content">
-            
             <div className="container-fluid">
               <div className="row">
                 <div className="col-12">
@@ -86,6 +91,6 @@ export default function Admin() {
         </aside>
         {/* /.control-sidebar */}
       </div>
-    </div>
+    </>
   );
 }

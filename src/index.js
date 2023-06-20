@@ -32,6 +32,8 @@ import AdminBrandEdit from './admin/scenes/brand/AdminBrandEdit';
 import AdminBrandAdd from './admin/scenes/brand/AdminBrandAdd';
 import Register from './auth/Register';
 import Login from './auth/Login';
+import { Provider } from 'react-redux';
+import store from './state/store';
 
 
 
@@ -193,7 +195,9 @@ const router = createBrowserRouter([
 ])
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <Provider store={store}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
   </React.StrictMode>
 );
 

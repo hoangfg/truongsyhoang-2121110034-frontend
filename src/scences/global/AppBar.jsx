@@ -2,6 +2,7 @@ import React from "react";
 import currency from "currency.js";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import AuthBox from "./AuthBox";
 
 export default function AppBar() {
   var cartItems = useSelector((state) => state.cart.items);
@@ -36,15 +37,7 @@ export default function AppBar() {
             <Link to="/">
               <span className="icon-home" /> Home
             </Link>
-            <a href="#st">
-              <span className="icon-user" /> My Account
-            </a>
-            <Link to="/register">
-              <span className="icon-edit" /> Free Register{" "}
-            </Link>
-            <Link to="/login">
-              <span className="icon-signin" /> login
-            </Link>
+            <AuthBox />
             <a href="contact.html">
               <span className="icon-envelope" /> Contact us
             </a>

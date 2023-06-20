@@ -7,7 +7,10 @@ import { validateProduct } from "./../../../helpers/Validate";
 import { productApi } from "../../../Api/productApi";
 import FileUpload from "../../../components/FileUpload";
 import AppUrl from "../../../Api/AppUrl";
+import CkeditorBox from "../../../components/CkeditorBox";
+
 export default function AdminProductAdd() {
+
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
     productName: "",
@@ -24,6 +27,19 @@ export default function AdminProductAdd() {
       [e.target.name]: e.target.value,
     });
     // ?console.log('data', data)
+  };
+  const handleDescriptionChange = (newDescription) => {
+    setData({
+      ...data,
+      description: newDescription,
+    });
+  };
+
+  const handleDetailChange = (newDetail) => {
+    setData({
+      ...data,
+      detail: newDetail,
+    });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -100,7 +116,13 @@ export default function AdminProductAdd() {
       })
     );
   };
-
+  const handleUploadAdapterPlugin = (editor) => {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      // Custom upload adapter logic goes here
+      // You can implement your own upload functionality and return an adapter instance
+      // Refer to the CKEditor documentation for more information: https://ckeditor.com/docs/ckeditor5/latest/features/image-upload/simple-upload-adapter.html
+    };
+  };
   var myViewImages =
     images.length == 0 ? (
       <div className="col-3 p-2">
@@ -182,7 +204,7 @@ export default function AdminProductAdd() {
                   Description
                 </label>
                 <div className="col-9">
-                  <textarea
+                  {/* <textarea
                     id="description"
                     name="description"
                     cols={40}
@@ -191,7 +213,18 @@ export default function AdminProductAdd() {
                     aria-describedby="descriptionHelpBlock"
                     defaultValue={""}
                     onChange={handleChange}
+                  /> */}
+                  <CkeditorBox
+                    id="description"
+                    name="description"
+                    value={data.description}
+                    onChange={handleDescriptionChange}
+                    // description={data.description}
+                    // setDescription={(value) =>
+                    //   setData({ ...data, description: value })
+                    // }
                   />
+
                   <span
                     id="descriptionHelpBlock"
                     className="form-text text-muted"
@@ -205,7 +238,7 @@ export default function AdminProductAdd() {
                   Detail
                 </label>
                 <div className="col-9">
-                  <textarea
+                  {/* <textarea
                     id="detail"
                     name="detail"
                     cols={40}
@@ -214,7 +247,18 @@ export default function AdminProductAdd() {
                     aria-describedby="detailHelpBlock"
                     defaultValue={""}
                     onChange={handleChange}
+                  /> */}
+                  <CkeditorBox
+                    id="detail"
+                    name="detail"
+                    value={data.detail}
+                    onChange={handleDetailChange}
+                    // description={data.description}
+                    // setDescription={(value) =>
+                    //   setData({ ...data, description: value })
+                    // }
                   />
+
                   <span id="detailHelpBlock" className="form-text text-muted">
                     Chi tiết sản phẩm
                   </span>

@@ -28,6 +28,19 @@ export default function AdminProductEdit() {
     });
     // ?console.log('data', data)
   };
+  const handleDescriptionChange = (newDescription) => {
+    setData({
+      ...data,
+      description: newDescription,
+    });
+  };
+
+  const handleDetailChange = (newDetail) => {
+    setData({
+      ...data,
+      detail: newDetail,
+    });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     var err = validateProduct(data);
@@ -42,7 +55,7 @@ export default function AdminProductEdit() {
           } else {
             document.getElementById("btnEditProduct").innerText = "Edit.....";
             const response = await productApi.update(id, sendData);
-            // console.log();
+            console.log("send", sendData);
             if (response.status == 200) {
               toast.success("Thêm sản phẩm thành công");
               // console.log(response.data.data);

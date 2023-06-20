@@ -1,18 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputPassword from "../components/InputPassword";
-
+import { userApi } from "../Api/userApi";
+import { setCurrent, setToken } from "../state/userSlice";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import Loading1 from "../components/Loading1";
 export default function Register() {
-    const {register, handleSubmit, formState: {errors}, getValues} = useForm();
-    const onSubmit = (data) => {
-        alert('call api register')
-    }
-    const validateConfirmPAssword = (value) => {
-      var {password} = getValues()
-      return value == password
-    }
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
+  const validateConfirmPAssword = (value) => {
+    var { password } = getValues();
+    return value == password;
+  };
+  var myView2 = loading === true ? <Loading1 /> : "";
+  const onSubmit = (data) => {
+    // console.log(data);
+    // alert('call api register')
+    const callRegister = async (data) => {
+      try {
+        setLoading(true);
+        
+        const response = await userApi.register(data);
+        // console.log(response);
+        dispatch(setCurrent(response.data.user));
+        dispatch(setToken(response.data.jwt));
+
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", JSON.stringify(response.data.jwt));
+        toast.success("Register success");
+        setLoading(false);
+        reset();
+      } catch (error) {
+        toast.error("register error \n" + error);
+        setLoading(false);
+      }
+    };
+    callRegister(data);
+  };
+
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <ul className="breadcrumb">
         <li>
           <a href="index.html">Home</a> <span className="divider">/</span>
@@ -78,7 +126,13 @@ export default function Register() {
                 placeholder="Enter Password"
                 id="inputPass"
               /> */}
-              <InputPassword label="password" register={register} validateFunction={() => {return true}} />
+              <InputPassword
+                label="password"
+                register={register}
+                validateFunction={() => {
+                  return true;
+                }}
+              />
               {errors.password?.type === "required" && (
                 <p style={{ color: "red" }}>Password is required</p>
               )}
@@ -110,12 +164,16 @@ export default function Register() {
                 </p>
               )}
               {errors.confirmPassword?.type === "validate" && (
-                <p style={{ color: "red" }}>password and confirm password not match</p>
+                <p style={{ color: "red" }}>
+                  password and confirm password not match
+                </p>
               )}
             </div>
           </div>
+
           <div className="control-group">
             <div className="controls">
+              {myView2}
               <input
                 type="submit"
                 name="submitAccount"

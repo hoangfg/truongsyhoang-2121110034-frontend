@@ -28,7 +28,7 @@ export default function InputPassword(props) {
         style={{
           marginLeft: "-30px",
           cursor: "pointer",
-          verticalAlign: "-2px",
+          verticalAlign: "2px",
         }}
         onClick={togglePassword}
         aria-hidden="true"
