@@ -7,7 +7,7 @@ export default function AdminProduct() {
   return (
     <div>
       <Outlet />
-      <AdminProductDetail />
+      {/* <AdminProductDetail /> */}
     </div>
   );
 }

@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CategorySelect from "./../../../components/CategorySelect";
-import BrandSelect from "../../../components/BrandSelect";
-import { validateProduct } from "./../../../helpers/Validate";
-import { productApi } from "../../../Api/productApi";
+
+import TopicSelect from "../../../components/TopicSelect";
+
+import { postApi } from "../../../Api/postApi";
 import FileUpload from "../../../components/FileUpload";
 import AppUrl from "../../../Api/AppUrl";
-import { useParams } from "react-router-dom";
-export default function AdminProductEdit() {
-  const { id } = useParams();
+import CkeditorBox from "../../../components/CkeditorBox";
+
+export default function AdminPostAdd() {
+
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
-    productName: "",
+    postTitle: "",
     description: "",
-    detail: "",
-    price: "",
-    category: "",
-    brand: "",
+    detail: "",  
+    topic: "",  
     image: [],
   });
-  // console.log("data 1: ", data);
   const handleChange = (e) => {
     setData({
       ...data,
@@ -43,47 +41,56 @@ export default function AdminProductEdit() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    var err = validateProduct(data);
+    var err = "";
+     if (data.postTitle == "") {
+       err += "Post Title is required \n";
+     }
+     if (data.description == "") {
+       err += "Description is required \n";
+     }
+     if (data.detail == "") {
+       err += "Detail is required \n";
+     }
+     if (data.topic == "") {
+       err += "Topic is required \n";
+     }
     if (err === "") {
-      const updateProduct = async (id, data) => {
+      const addPost = async (data) => {
         var sendData = {
           data: data,
         };
-         console.log("s", sendData);
+        // console.log(sendData.data);
         try {
-          if (sendData.data.image.length < 1) {
-            toast.error("Thêm sản phẩm thất bại, cần ít nhất 1 hình ảnh");
+          if (sendData.data.image.length < 1 || sendData.data.image.length > 2) {
+            toast.error("Thêm sản phẩm thất bại, cần nhiều nhất 1 hình ảnh");
           } else {
-            document.getElementById("btnEditProduct").innerText = "Edit.....";
-            const response = await productApi.update(id, sendData);
-            console.log("send", sendData);
+            document.getElementById("btnAddPost").innerText = "Create.....";
+            const response = await postApi.add(sendData);
+            console.log(response);
+            console.log();
             if (response.status == 200) {
               toast.success("Thêm sản phẩm thành công");
-              // console.log(response.data.data);
-              var newProduct = response.data.data;
-              document.getElementById("editProduct").reset();
-              document.getElementById("btnEditProduct").innerText = "Submit";
-
-              // var response = await productApi.get(id, params);
+              document.getElementById("createPost").reset();
+              document.getElementById("btnAddPost").innerText = "Submit";
 
               setData({
-                productName: data.productName,
-                description: data.description,
-                detail: data.detail,
-                price: data.price,
-                category: data.category,
-                brand: data.brand,
-                image: data.image.map((img) => img.id),
+                postTitle: "",
+                description: "",
+                detail: "",
+
+                topic: "",
+
+                image: [],
               });
             }
           }
           // console.log(sendData.data.image);
         } catch (error) {
-          toast.error("Thêm sản phẩm thất bại" + error);
+          toast.error("Thêm sản phẩm thất bại \n" + error);
         }
         window.scroll(0, 0);
       };
-      updateProduct(id, data);
+      addPost(data);
     } else {
       toast.error(err);
       return false;
@@ -91,36 +98,6 @@ export default function AdminProductEdit() {
   };
 
   const [images, setImages] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      var params = {
-        populate: "*",
-      };
-      var response = await productApi.get(id, params);
-      // console.log(response.data);
-      var oldProduct = response.data.data;
-      setData({
-        productName: oldProduct.attributes.productName,
-        description: oldProduct.attributes.description,
-        detail: oldProduct.attributes.detail,
-        price: oldProduct.attributes.price,
-        category: oldProduct.attributes.category.data.id,
-        brand: oldProduct.attributes.brand.data.id,
-        image: oldProduct.attributes.image.data.map((img) => img.id),
-      });
-      // console.log("data", data);
-      var oldImages = oldProduct.attributes.image.data.map((img) => {
-        return {
-          id: img.id,
-          url: img.attributes.url,
-          name: img.attributes.name,
-        };
-      });
-      setImages([...oldImages]);
-    };
-    fetchData();
-  }, [id]);
-
   const addImage = (id, url, name) => {
     setData({
       ...data,
@@ -149,7 +126,13 @@ export default function AdminProductEdit() {
       })
     );
   };
-
+  const handleUploadAdapterPlugin = (editor) => {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      // Custom upload adapter logic goes here
+      // You can implement your own upload functionality and return an adapter instance
+      // Refer to the CKEditor documentation for more information: https://ckeditor.com/docs/ckeditor5/latest/features/image-upload/simple-upload-adapter.html
+    };
+  };
   var myViewImages =
     images.length == 0 ? (
       <div className="col-3 p-2">
@@ -160,7 +143,7 @@ export default function AdminProductEdit() {
       </div>
     ) : (
       images.map((img) => {
-        // console.log(img);
+        console.log(img);
         return (
           <div className="row border-1 border-bottom m-0 pt-3 d-flex justify-content-between">
             <div className="">
@@ -207,23 +190,22 @@ export default function AdminProductEdit() {
         theme="colored"
       />
       <div className="col-7">
-        <form id="editProduct" onSubmit={handleSubmit}>
+        <form id="createPost" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="form-group row" style={{ height: "40px" }}>
-                <label htmlFor="productName" className="col-3 col-form-label">
-                  productName
+                <label htmlFor="postTitle" className="col-3 col-form-label">
+                  postTitle
                 </label>
                 <div className="col-9">
                   <input
                     style={{ height: "100%" }}
-                    id="productName"
-                    name="productName"
-                    placeholder="productName"
+                    id="postTitle"
+                    name="postTitle"
+                    placeholder="postTitle"
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    value={data.productName}
                   />
                 </div>
               </div>
@@ -232,7 +214,7 @@ export default function AdminProductEdit() {
                   Description
                 </label>
                 <div className="col-9">
-                  <textarea
+                  {/* <textarea
                     id="description"
                     name="description"
                     cols={40}
@@ -241,8 +223,18 @@ export default function AdminProductEdit() {
                     aria-describedby="descriptionHelpBlock"
                     defaultValue={""}
                     onChange={handleChange}
+                  /> */}
+                  <CkeditorBox
+                    id="description"
+                    name="description"
                     value={data.description}
+                    onChange={handleDescriptionChange}
+                    // description={data.description}
+                    // setDescription={(value) =>
+                    //   setData({ ...data, description: value })
+                    // }
                   />
+
                   <span
                     id="descriptionHelpBlock"
                     className="form-text text-muted"
@@ -256,7 +248,7 @@ export default function AdminProductEdit() {
                   Detail
                 </label>
                 <div className="col-9">
-                  <textarea
+                  {/* <textarea
                     id="detail"
                     name="detail"
                     cols={40}
@@ -265,49 +257,30 @@ export default function AdminProductEdit() {
                     aria-describedby="detailHelpBlock"
                     defaultValue={""}
                     onChange={handleChange}
+                  /> */}
+                  <CkeditorBox
+                    id="detail"
+                    name="detail"
                     value={data.detail}
+                    onChange={handleDetailChange}
+                    // description={data.description}
+                    // setDescription={(value) =>
+                    //   setData({ ...data, description: value })
+                    // }
                   />
+
                   <span id="detailHelpBlock" className="form-text text-muted">
                     Chi tiết sản phẩm
                   </span>
                 </div>
               </div>
-              <div className="form-group row" style={{ height: "40px" }}>
-                <label className="col-3 col-form-label" htmlFor="price">
-                  price
-                </label>
-                <div className="col-9">
-                  <input
-                    style={{ height: "100%" }}
-                    id="price"
-                    name="price"
-                    type="number"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={data.price}
-                  />
-                </div>
-              </div>
+
               <div className="form-group row">
-                <label htmlFor="category" className="col-3 col-form-label">
-                  Category
+                <label htmlFor="topic" className="col-3 col-form-label">
+                  Topic
                 </label>
                 <div className="col-9">
-                  <CategorySelect
-                    handleChange={handleChange}
-                    defaultValue={data.category}
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="brand" className="col-3 col-form-label">
-                  Brand
-                </label>
-                <div className="col-9">
-                  <BrandSelect
-                    handleChange={handleChange}
-                    defaultValue={data.brand}
-                  />
+                  <TopicSelect handleChange={handleChange} />
                 </div>
               </div>
             </div>
@@ -315,7 +288,7 @@ export default function AdminProductEdit() {
           <div className="row">
             <div className="d-flex justify-content-end col-12">
               <button
-                id="btnEditProduct"
+                id="btnAddPost"
                 name="submit"
                 type="submit"
                 className="btn btn-primary justify-content-end"
@@ -328,7 +301,7 @@ export default function AdminProductEdit() {
       </div>
       <div className="col-5">
         <div className="form-group row">
-          <label htmlFor="brand" className="col-3 col-form-label">
+          <label htmlFor="topic" className="col-3 col-form-label">
             Image
           </label>
           <div className="col-9">
@@ -339,7 +312,7 @@ export default function AdminProductEdit() {
         <div className="form-group row"></div>
         {/* <div className="form-group ">
           <div id="actions" className="row">
-            <label htmlFor="brand" className="col-4 col-form-label">
+            <label htmlFor="topic" className="col-4 col-form-label">
               Image
             </label>
             <div className="col-8">

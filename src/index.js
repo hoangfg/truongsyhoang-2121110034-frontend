@@ -34,6 +34,16 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import { Provider } from 'react-redux';
 import store from './state/store';
+import AdminTopic from './admin/scenes/topic/AdminTopic';
+import AdminTopicBox from './admin/scenes/topic/AdminTopicBox';
+import AdminTopicDetail from './admin/scenes/topic/AdminTopicDetail';
+import AdminTopicAdd from './admin/scenes/topic/AdminTopicAdd';
+import AdminTopicEdit from './admin/scenes/topic/AdminTopicEdit';
+import AdminPost from './admin/scenes/post/AdminPost';
+import AdminPostBox from './admin/scenes/post/AdminPostBox';
+import AdminPostDetail from './admin/scenes/post/AdminPostDetail';
+import AdminPostAdd from './admin/scenes/post/AdminPostAdd';
+import AdminPostEdit from './admin/scenes/post/AdminPostEdit';
 
 
 
@@ -187,6 +197,58 @@ const router = createBrowserRouter([
           {
             path: '/admin/category/edit/:id',
             element: <AdminCategoryEdit />,
+          },
+        ]
+      },
+      {
+        path: '/admin/topic',
+        element: <AdminTopic />,
+        children: [
+          {
+            index: true,
+            element: <AdminTopicBox />
+          },
+          {
+            path: '/admin/topic/page/:pageNum',
+            element: <AdminTopicBox />,
+          },
+          {
+            path: '/admin/topic/:id',
+            element: <AdminTopicDetail />,
+          },
+          {
+            path: '/admin/topic/add',
+            element: <AdminTopicAdd />,
+          },
+          {
+            path: '/admin/topic/edit/:id',
+            element: <AdminTopicEdit />,
+          },
+        ]
+      },
+      {
+        path: '/admin/post',
+        element: <AdminPost />,
+        children: [
+          {
+            index: true,
+            element: <AdminPostBox />
+          },
+          {
+            path: '/admin/post/page/:pageNum',
+            element: <AdminPostBox />,
+          },
+          {
+            path: '/admin/post/:id',
+            element: <AdminPostDetail />,
+          },
+          {
+            path: '/admin/post/add',
+            element: <AdminPostAdd />,
+          },
+          {
+            path: '/admin/post/edit/:id',
+            element: <AdminPostEdit />,
           },
         ]
       },

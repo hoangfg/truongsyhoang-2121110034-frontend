@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function AdminBrandDetail() {
+export default function AdminTopicDetail() {
   return (
     <div>
       dd

@@ -6,9 +6,10 @@ import { setCurrent, setToken } from "../state/userSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import Loading1 from "../components/Loading1";
+import { Navigate, useNavigate } from "react-router-dom";
 export default function Register() {
   const [loading, setLoading] = useState(false);
-
+ const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     reset,
@@ -39,6 +40,7 @@ export default function Register() {
         toast.success("Register success");
         setLoading(false);
         reset();
+        navigate("/login"); 
       } catch (error) {
         toast.error("register error \n" + error);
         setLoading(false);

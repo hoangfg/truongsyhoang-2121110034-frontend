@@ -38,9 +38,9 @@ export default function AppBar() {
               <span className="icon-home" /> Home
             </Link>
             <AuthBox />
-            <a href="contact.html">
+            <Link to='/contact'>
               <span className="icon-envelope" /> Contact us
-            </a>
+            </Link>
             <Link to="/cart">
               <span className="icon-shopping-cart" /> {totalItems} Item(s) -{" "}
               <span className="badge badge-warning">

@@ -15,13 +15,16 @@ export default function Admin() {
   ss.type = "text/css";
   ss.href = "/admin/dist/css/adminlte.min.css";
   document.head.appendChild(ss);
-console.log(role)
+  // console.log(role)
+  // console.log("1", role === "Authenticated");
+  // console.log("1", role == "Authenticated");
   return (
     <>
       {/* Site wrapper */}
       <div className="wrapper">
-        {role == "Authenticated" && <Navigate to="/" replace={true} />}
-        {role == "Public" && <Navigate to="/login" replace={true} />}
+        {role === "Authenticated" && <Navigate to="/" replace={true} />}
+        {role === "Public" && <Navigate to="/login" replace={true} />}
+
         {/* Navbar */}
         <TopNav />
         {/* /.navbar */}

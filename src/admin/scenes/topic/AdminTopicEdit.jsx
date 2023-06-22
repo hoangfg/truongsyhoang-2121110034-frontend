@@ -3,13 +3,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import AppUrl from "../../../Api/AppUrl";
-import { brandApi } from "../../../Api/brandApi";
+import { topicApi } from "../../../Api/topicApi";
 import { useParams } from "react-router-dom";
-export default function AdminBrandEdit() {
+export default function AdminTopicEdit() {
   const { id } = useParams();
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
-    brandName: "",
+    topicName: "",
     description: "",
   });
   const handleChange = (e) => {
@@ -22,30 +22,30 @@ export default function AdminBrandEdit() {
   const handleSubmit = (e) => {
     e.preventDefault();
     var err = "";
-    if (data.brandName == "") {
-      err += "Brand Name is required \n";
+    if (data.topicName == "") {
+      err += "Topic Name is required \n";
     }
     if (data.description == "") {
       err += "Description is required \n";
     }
 
     if (err === "") {
-      const updateBrand = async (data) => {
+      const updateTopic = async (data) => {
         var sendData = {
           data: data,
         };
         try {
-          document.getElementById("btnUpdateBrand").innerText =
+          document.getElementById("btnUpdateTopic").innerText =
             "Update.....";
-          const response = await brandApi.update(id, sendData);
+          const response = await topicApi.update(id, sendData);
           console.log();
           if (response.status == 200) {
             toast.success("Thay đổi thương hiệu thành công");
-            document.getElementById("updateBrand").reset();
-            document.getElementById("btnUpdateBrand").innerText = "Submit";
+            document.getElementById("updateTopic").reset();
+            document.getElementById("btnUpdateTopic").innerText = "Submit";
 
             setData({
-              brandName: data.brandName,
+              topicName: data.topicName,
               description: data.description,
             });
           }
@@ -55,7 +55,7 @@ export default function AdminBrandEdit() {
         }
         window.scroll(0, 0);
       };
-      updateBrand(data);
+      updateTopic(data);
     } else {
       toast.error(err);
       return false;
@@ -63,11 +63,11 @@ export default function AdminBrandEdit() {
   };
   useEffect(() => {
     const fetchData = async (e) => {
-      var response = await brandApi.get(id);
+      var response = await topicApi.get(id);
       // console.log(response);
       var oldCate = response.data.data;
       setData({
-        brandName: oldCate.attributes.brandName,
+        topicName: oldCate.attributes.topicName,
         description: oldCate.attributes.description,
       });
       // console.log(data)
@@ -89,23 +89,23 @@ export default function AdminBrandEdit() {
         theme="colored"
       />
       <div className="col-12">
-        <form id="updateBrand" onSubmit={handleSubmit}>
+        <form id="updateTopic" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="form-group row" style={{ height: "40px" }}>
-                <label htmlFor="brandName" className="col-3 col-form-label">
-                  brandName
+                <label htmlFor="topicName" className="col-3 col-form-label">
+                  topicName
                 </label>
                 <div className="col-9">
                   <input
                     style={{ height: "100%" }}
-                    id="brandName"
-                    name="brandName"
-                    placeholder="brandName"
+                    id="topicName"
+                    name="topicName"
+                    placeholder="topicName"
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    value={data.brandName}
+                    value={data.topicName}
                   />
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function AdminBrandEdit() {
           <div className="row">
             <div className="d-flex justify-content-end col-12">
               <button
-                id="btnUpdateBrand"
+                id="btnUpdateTopic"
                 name="submit"
                 type="submit"
                 className="btn btn-primary justify-content-end"

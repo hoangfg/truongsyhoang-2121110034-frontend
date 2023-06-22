@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Paginate from "../../../components/Paginate";
 import { Link, useParams } from "react-router-dom";
-import { topicApi } from "./../../../Api/topicApi";
+import AdminPostItem from "./AdminPostItem";
 import Loading from "../../../components/Loading";
-import AdminTopicItem from "./AdminTopicItem";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { postApi } from "../../../Api/postApi";
-export default function AdminTopicBox() {
-  var [categories, setCategories] = useState({});
+import Paginate from "../../../components/Paginate";
+
+export default function AdminPostBox() {
+  var [posts, setPosts] = useState({});
   var [loading, setLoading] = useState(true);
   var [totalPage, setTotalPage] = useState(1);
   const [msgSuccess, setMsgSuccess] = useState("");
@@ -18,23 +16,16 @@ export default function AdminTopicBox() {
   var { pageNum } = useParams();
 
   const handleDelete = (e) => {
-    var topicId = e.target.getAttribute("name");
-
-    const deleteTopic = async (id) => {
-      var c = window.confirm("Remove Topic");
+    const deletePost = async (id) => {
+      var c = window.confirm("Remove Post");
       if (c === true) {
         try {
-          const posts = await postApi.getListByTopicID(topicId);
-          if (posts.data.data.length > 0) {
-            toast.warning("Tôn tại sản phẩm không thể xóa thương hiệu");
-          } else {
-            e.target.classList.remove("icon-remove");
-            e.target.classList.add("icon-spinner");
-            await topicApi.delete(id);
-            toast.success("Xóa danh mục thành công");
-          }
+          e.target.classList.remove("icon-remove");
+          e.target.classList.add("icon-spinner");
+          await postApi.delete(id);
+          setMsgSuccess("Delete success " + id);
         } catch (error) {
-          toast.success("Xóa thất bại ", error);
+          setMsgwarning("Delete error " + id + error);
         } finally {
           setLoadData(loadData + 1);
           window.scroll(0, 0);
@@ -43,65 +34,23 @@ export default function AdminTopicBox() {
         }
       }
     };
-    deleteTopic(e.target.getAttribute("name"));
+    deletePost(e.target.getAttribute("name"));
   };
+
   const handleSelect = (e) => {
     setViewOption(e.target.value);
   };
-  // const handlePublish = (e) => {
-  //
-  //   const togglePublish = async (e) => {
-
-  //     await topicApi.update(e.target.getAttribute("name"), data);
-  //     setLoadData(loadData + 1);
-  //     toast.success("Thay đổi trạng tháu thành công");
-  //     // console.log(e.target.value);
-  //   };
-  //   togglePublish(e);
-  // };
-
-  const handlePublish = async (e) => {
-    // Kiểm tra nếu giá trị e.target.value là "0"
-    var topicId = e.target.getAttribute("name");
+  const handlePublish = (e) => {
     var data = {
       data: {
         publishedAt: e.target.value == 0 ? Date.now() : null,
       },
     };
-    if (e.target.value == 0) {
-      await topicApi.update(topicId, data);
-      toast.success("Thay đổi trạng thái thành công");
-    } else {
-      // var params = {
-      //   populate: "*",
-      //   data: {
-      //     topic: {
-      //       data: {
-      //         id: 6,
-      //       },
-      //     },
-      //   },
-      // };
-      const posts = await postApi.getListByTopicID(topicId);
-      if (posts.data.data.length > 0) {
-        //  const c = window.confirm(
-        //    "Nếu thay đổi sẽ làm thay đổi toàn bộ sản phẩm liên quan"
-        //  );
-        //  if (c) {
-        //    var dataP = {
-        //      data: {
-        //        publishedAt: null,
-        //      },
-        //    };
-        toast.warning("Tôn tại sản phẩm không thể thay đôi");
-      } else {
-        await topicApi.update(topicId, data);
-
-        toast.success("Thay đổi trạng thái thành công");
-      }
-    }
-
-    setLoadData(loadData + 1);
+    const togglePublish = async (e) => {
+      await postApi.update(e.target.getAttribute("name"), data);
+      setLoadData(loadData + 1);
+    };
+    togglePublish(e);
   };
   var params = {
     populate: "*",
@@ -116,6 +65,17 @@ export default function AdminTopicBox() {
   };
   var myView = (
     <tbody>
+      {/* {
+      loading === true ? (
+      <Loading />) : (
+      {posts.map((post, i) => (
+        <AdminPostItem
+          key={post.id}
+          stt={(pageNum - 1) * 12 + i + 1}
+          post={post}
+        />
+      ))
+      )} */}
       {loading === true ? (
         <tr>
           <td colSpan="12">
@@ -125,45 +85,35 @@ export default function AdminTopicBox() {
           </td>
         </tr>
       ) : (
-        categories.map((topic, i) => (
-          <AdminTopicItem
+        posts.map((post, i) => (
+          <AdminPostItem
             handleDelete={handleDelete}
             handlePublish={handlePublish}
-            key={topic.id}
+            key={post.id}
             stt={
               (params.pagination.page - 1) * params.pagination.pageSize + i + 1
             }
-            topic={topic}
+            post={post}
           />
         ))
       )}
     </tbody>
   );
+
   useEffect(() => {
-    const fatchData = async () => {
-      const response = await topicApi.getAll(params);
-      setCategories(response.data.data);
+    const fetchData = async () => {
+      var response = await postApi.getAll(params);
+      // console.log(response);
+      setPosts(response.data.data);
       setTotalPage(response.data.meta.pagination.pageCount);
-      //   console.log(pageNum);
+
       setLoading(false);
     };
-    fatchData();
-  }, [viewOption, pageNum, loadData]);
+    fetchData();
+  }, [pageNum, loadData, viewOption]);
   return (
     <div className="card-body">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      {/* <div className="col-12">
+      <div className="col-12">
         {msgWarning !== "" && (
           <div className="alert alert-danger alert-dismissible">
             <button
@@ -195,18 +145,18 @@ export default function AdminTopicBox() {
             </h5>
           </div>
         )}
-      </div> */}
+      </div>
       <div id="example1_wrapper" className="dataTables_wrapper dt-bootstrap4">
         <div className="row">
           <div className="col-sm-12 col-md-6">
             <div className="dt-buttons btn-group flex-wrap">
               {" "}
               <Link
-                to="/admin/topic/add"
+                to="/admin/post/add"
                 className="btn btn-success buttons-csv buttons-html5"
               >
                 <i className="fas fa-plus mx-1" />
-                <span>Add Topic</span>
+                <span>Add Post</span>
               </Link>
             </div>
           </div>
@@ -286,9 +236,19 @@ export default function AdminTopicBox() {
                     aria-sort="ascending"
                     aria-label="Rendering engine: activate to sort column descending"
                   >
-                    categoryName
+                    Image
                   </th>
-
+                  <th
+                    className="sorting"
+                    tabIndex={0}
+                    aria-controls="example1"
+                    rowSpan={1}
+                    colSpan={1}
+                    aria-label="Browser: activate to sort column ascending"
+                  >
+                    Post Name
+                  </th>
+                 
                   <th
                     className="sorting"
                     tabIndex={0}
@@ -329,7 +289,7 @@ export default function AdminTopicBox() {
                 <Paginate
                   totalPage={totalPage}
                   currentPage={pageNum ? pageNum : 1}
-                  basePath="http://localhost:3000/admin/topic/page/"
+                  basePath="http://localhost:3000/admin/post/page/"
                 />
               </div>
             )}

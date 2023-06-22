@@ -72,7 +72,6 @@ export default function Menu() {
                           <p>Thêm sản phẩm</p>
                         </Link>
                       </li>
-                     
                     </ul>
                   </li>
                   <li className="nav-item">
@@ -99,7 +98,6 @@ export default function Menu() {
                           <p>Thêm danh mục</p>
                         </Link>
                       </li>
-                     
                     </ul>
                   </li>
                   <li className="nav-item">
@@ -126,7 +124,32 @@ export default function Menu() {
                           <p>Thêm thương hiệu</p>
                         </Link>
                       </li>
-                     
+                    </ul>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#st" className="nav-link">
+                      <i className="nav-icon fas fa-table" />
+                      <p>
+                        Quản lý chủ đề
+                        <i className="fas fa-angle-left right" />
+                      </p>
+                    </a>
+                    <ul
+                      className="nav nav-treeview"
+                      style={{ display: "none" }}
+                    >
+                      <li className="nav-item">
+                        <Link to="/admin/topic" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Tất cả chủ đề</p>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to="/admin/topic/add" className="nav-link">
+                          <i className="far fa-circle nav-icon" />
+                          <p>Thêm chủ đề</p>
+                        </Link>
+                      </li>
                     </ul>
                   </li>
                 </ul>

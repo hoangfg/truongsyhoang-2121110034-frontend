@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CategorySelect from "./../../../components/CategorySelect";
-import BrandSelect from "../../../components/BrandSelect";
-import { validateProduct } from "./../../../helpers/Validate";
-import { productApi } from "../../../Api/productApi";
+import TopicSelect from "../../../components/TopicSelect";
+// import { validatePost } from "../../../helpers/Validate";
+// import { productApi } from "../../../Api/productApi";
 import FileUpload from "../../../components/FileUpload";
 import AppUrl from "../../../Api/AppUrl";
 import { useParams } from "react-router-dom";
-export default function AdminProductEdit() {
+import { postApi } from "../../../Api/postApi";
+
+export default function AdminPostEdit() {
   const { id } = useParams();
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
-    productName: "",
+    postTitle: "",
     description: "",
     detail: "",
-    price: "",
-    category: "",
-    brand: "",
+    topic: "",
     image: [],
   });
   // console.log("data 1: ", data);
@@ -41,93 +40,105 @@ export default function AdminProductEdit() {
       detail: newDetail,
     });
   };
+  // console.log("img", );
   const handleSubmit = (e) => {
     e.preventDefault();
-    var err = validateProduct(data);
-    if (err === "") {
-      const updateProduct = async (id, data) => {
+    var err = "";
+    if (data.postTitle == "") {
+      err += "Post Title is required \n";
+    }
+    if (data.description == "") {
+      err += "Description is required \n";
+    }
+    if (data.detail == "") {
+      err += "Detail is required \n";
+    }
+    if (data.topic == "") {
+      err += "Topic is required \n";
+    }
+    if (err == "") {
+      const updatePost = async (id, data) => {
         var sendData = {
           data: data,
         };
-         console.log("s", sendData);
+
         try {
-          if (sendData.data.image.length < 1) {
-            toast.error("Thêm sản phẩm thất bại, cần ít nhất 1 hình ảnh");
-          } else {
-            document.getElementById("btnEditProduct").innerText = "Edit.....";
-            const response = await productApi.update(id, sendData);
-            console.log("send", sendData);
+          if (image.length === 1) {
+            document.getElementById("btnEditPost").innerText = "Edit.....";
+            const response = await postApi.update(id, sendData);
+            // console.log("send", sendData);
             if (response.status == 200) {
-              toast.success("Thêm sản phẩm thành công");
+              toast.success("Cập nhật sản phẩm thành công");
               // console.log(response.data.data);
-              var newProduct = response.data.data;
-              document.getElementById("editProduct").reset();
-              document.getElementById("btnEditProduct").innerText = "Submit";
+              var newPost = response.data.data;
+              document.getElementById("editPost").reset();
+              document.getElementById("btnEditPost").innerText = "Submit";
 
               // var response = await productApi.get(id, params);
 
               setData({
-                productName: data.productName,
+                postTitle: data.postTitle,
                 description: data.description,
                 detail: data.detail,
-                price: data.price,
-                category: data.category,
-                brand: data.brand,
-                image: data.image.map((img) => img.id),
+                topic: data.topic,
+                image: data.image.id,
               });
             }
+          } else {
+            toast.error("Cập nhật sản phẩm thất bại, cần 1 hình ảnh");
           }
+
           // console.log(sendData.data.image);
         } catch (error) {
-          toast.error("Thêm sản phẩm thất bại" + error);
+          // console.log(sendData.data.image);
+          console.log("s", sendData)
+          toast.error("Cập nhật sản phẩm thất bại" + error);
         }
         window.scroll(0, 0);
       };
-      updateProduct(id, data);
+      updatePost(id, data);
     } else {
       toast.error(err);
       return false;
     }
   };
 
-  const [images, setImages] = useState([]);
+  const [image, setImage] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       var params = {
         populate: "*",
       };
-      var response = await productApi.get(id, params);
+      var response = await postApi.get(id, params);
       // console.log(response.data);
-      var oldProduct = response.data.data;
+      var oldPost = response.data.data;
+      console.log(oldPost);
       setData({
-        productName: oldProduct.attributes.productName,
-        description: oldProduct.attributes.description,
-        detail: oldProduct.attributes.detail,
-        price: oldProduct.attributes.price,
-        category: oldProduct.attributes.category.data.id,
-        brand: oldProduct.attributes.brand.data.id,
-        image: oldProduct.attributes.image.data.map((img) => img.id),
+        postTitle: oldPost.attributes.postTitle,
+        description: oldPost.attributes.description,
+        detail: oldPost.attributes.detail,
+
+        topic: oldPost.attributes.topic.data.id,
+        image: oldPost.attributes.image.data.id,
       });
       // console.log("data", data);
-      var oldImages = oldProduct.attributes.image.data.map((img) => {
-        return {
-          id: img.id,
-          url: img.attributes.url,
-          name: img.attributes.name,
-        };
-      });
-      setImages([...oldImages]);
+      var oldImage = {
+        id: oldPost.attributes.image.data.id,
+        url: oldPost.attributes.image.data.attributes.url,
+        name: oldPost.attributes.image.data.attributes.name,
+      };
+      setImage([oldImage]);
     };
     fetchData();
   }, [id]);
 
   const addImage = (id, url, name) => {
-    setData({
-      ...data,
-      image: [...data.image, id],
-    });
-    setImages([
-      ...images,
+    setData((prevData) => ({
+      ...prevData,
+      image: Array.isArray(prevData.image) ? [...prevData.image, id] : [id],
+    }));
+    setImage((prevImages) => [
+      ...prevImages,
       {
         id: id,
         url: url,
@@ -137,21 +148,20 @@ export default function AdminProductEdit() {
   };
   const handleRemove = (e) => {
     var id = e.target.name;
-    setData({
-      ...data,
-      image: data.image.filter((img) => {
-        return img != id;
-      }),
-    });
-    setImages(
-      images.filter((img) => {
+    setData((prevData) => ({
+      ...prevData,
+      image: Array.isArray(prevData.image) ? [...prevData.image, id] : [id],
+    }));
+    setImage(
+      image.filter((img) => {
         return img.id != id;
       })
     );
+   
   };
-
+  console.log("img", image);
   var myViewImages =
-    images.length == 0 ? (
+    image.length == 0 ? (
       <div className="col-3 p-2">
         <img
           src="https://sogddt.camau.gov.vn/no-avatar.png"
@@ -159,7 +169,7 @@ export default function AdminProductEdit() {
         />
       </div>
     ) : (
-      images.map((img) => {
+      image.map((img) => {
         // console.log(img);
         return (
           <div className="row border-1 border-bottom m-0 pt-3 d-flex justify-content-between">
@@ -207,23 +217,23 @@ export default function AdminProductEdit() {
         theme="colored"
       />
       <div className="col-7">
-        <form id="editProduct" onSubmit={handleSubmit}>
+        <form id="editPost" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="form-group row" style={{ height: "40px" }}>
-                <label htmlFor="productName" className="col-3 col-form-label">
-                  productName
+                <label htmlFor="postTitle" className="col-3 col-form-label">
+                  postTitle
                 </label>
                 <div className="col-9">
                   <input
                     style={{ height: "100%" }}
-                    id="productName"
-                    name="productName"
-                    placeholder="productName"
+                    id="postTitle"
+                    name="postTitle"
+                    placeholder="postTitle"
                     type="text"
                     className="form-control"
                     onChange={handleChange}
-                    value={data.productName}
+                    value={data.postTitle}
                   />
                 </div>
               </div>
@@ -272,41 +282,15 @@ export default function AdminProductEdit() {
                   </span>
                 </div>
               </div>
-              <div className="form-group row" style={{ height: "40px" }}>
-                <label className="col-3 col-form-label" htmlFor="price">
-                  price
-                </label>
-                <div className="col-9">
-                  <input
-                    style={{ height: "100%" }}
-                    id="price"
-                    name="price"
-                    type="number"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={data.price}
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="category" className="col-3 col-form-label">
-                  Category
-                </label>
-                <div className="col-9">
-                  <CategorySelect
-                    handleChange={handleChange}
-                    defaultValue={data.category}
-                  />
-                </div>
-              </div>
+
               <div className="form-group row">
                 <label htmlFor="brand" className="col-3 col-form-label">
-                  Brand
+                  Topic
                 </label>
                 <div className="col-9">
-                  <BrandSelect
+                  <TopicSelect
                     handleChange={handleChange}
-                    defaultValue={data.brand}
+                    defaultValue={data.topic}
                   />
                 </div>
               </div>
@@ -315,7 +299,7 @@ export default function AdminProductEdit() {
           <div className="row">
             <div className="d-flex justify-content-end col-12">
               <button
-                id="btnEditProduct"
+                id="btnEditPost"
                 name="submit"
                 type="submit"
                 className="btn btn-primary justify-content-end"

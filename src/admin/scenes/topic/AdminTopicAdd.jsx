@@ -3,11 +3,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import AppUrl from "../../../Api/AppUrl";
-import { brandApi } from "../../../Api/brandApi";
-export default function AdminBrandAdd() {
+import { topicApi } from "../../../Api/topicApi";
+export default function AdminTopicAdd() {
   const [loadData, setLoadData] = useState(1);
   const [data, setData] = useState({
-    brandName: "",
+    topicName: "",
     description: "",
   });
   const handleChange = (e) => {
@@ -20,39 +20,39 @@ export default function AdminBrandAdd() {
   const handleSubmit = (e) => {
     e.preventDefault();
     var err = "";
-    if (data.brandName == "") {
-      err += "Brand Name is required \n";
+    if (data.topicName == "") {
+      err += "Topic Name is required \n";
     }
     if (data.description == "") {
       err += "Description is required \n";
     }
 
     if (err === "") {
-      const addBrand = async (data) => {
+      const addTopic = async (data) => {
         var sendData = {
           data: data,
         };
         try {
-          document.getElementById("btnAddBrand").innerText = "Create.....";
-          const response = await brandApi.add(sendData);
+          document.getElementById("btnAddTopic").innerText = "Create.....";
+          const response = await topicApi.add(sendData);
           console.log();
           if (response.status == 200) {
-            toast.success("Thêm danh mục thành công");
-            document.getElementById("createBrand").reset();
-            document.getElementById("btnAddBrand").innerText = "Submit";
+            toast.success("Thêm chủ đề thành công");
+            document.getElementById("createTopic").reset();
+            document.getElementById("btnAddTopic").innerText = "Submit";
 
             setData({
-              brandName: "",
+              topicName: "",
               description: "",
             });
           }
           // console.log(sendData.data.image);
         } catch (error) {
-          toast.error("Thêm danh mục thất bại \n" + error);
+          toast.error("Thêm chủ đề thất bại \n" + error);
         }
         window.scroll(0, 0);
       };
-      addBrand(data);
+      addTopic(data);
     } else {
       toast.error(err);
       return false;
@@ -74,19 +74,19 @@ export default function AdminBrandAdd() {
         theme="colored"
       />
       <div className="col-12">
-        <form id="createBrand" onSubmit={handleSubmit}>
+        <form id="createTopic" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="form-group row" style={{ height: "40px" }}>
-                <label htmlFor="brandName" className="col-3 col-form-label">
-                  brandName
+                <label htmlFor="topicName" className="col-3 col-form-label">
+                  topicName
                 </label>
                 <div className="col-9">
                   <input
                     style={{ height: "100%" }}
-                    id="brandName"
-                    name="brandName"
-                    placeholder="brandName"
+                    id="topicName"
+                    name="topicName"
+                    placeholder="topicName"
                     type="text"
                     className="form-control"
                     onChange={handleChange}
@@ -112,7 +112,7 @@ export default function AdminBrandAdd() {
                     id="descriptionHelpBlock"
                     className="form-text text-muted"
                   >
-                    Mô tả thương hiệu
+                    Mô tả chủ đề
                   </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function AdminBrandAdd() {
           <div className="row">
             <div className="d-flex justify-content-end col-12">
               <button
-                id="btnAddBrand"
+                id="btnAddTopic"
                 name="submit"
                 type="submit"
                 className="btn btn-primary justify-content-end"

@@ -20,5 +20,9 @@ export const postApi = {
     delete(id) {
         var url = `/posts/${id}`;
         return axiosInstance.delete(url)
-    }
+    },
+    getListByTopicID(topicID) {
+        var url = `posts?populate=topic&filters[topic][id]=${topicID}`;
+        return axiosInstance.get(url);
+    },
 }
